@@ -1,16 +1,17 @@
 <template>
   <div id="exerciseList-table">
-    <p v-if="exercises.length < 1">There are no exercises</p>
+    <h2>Exercises</h2>
+    <p v-if="distanceExercises.length < 1">There are no exercises</p>
     <table v-else>
-      <thead>
+      <!-- <thead>
         <tr>
           <th>Type</th>
           <th>Time</th>
           <th>Distance</th>
         </tr>
-      </thead>
+      </thead> -->
       <tbody>
-        <tr v-for="exercise in exercises" :key="exercise.id">
+        <tr v-for="exercise in distanceExercises" :key="exercise.id">
           <td v-if="editing === exercise.id">
             <input v-model="exercise.type" type="text" />
           </td>
@@ -27,12 +28,46 @@
           <td v-else>{{ exercise.distance }}</td>
 
           <td v-if="editing === exercise.id">
-            <button @click="editExercise(exercise)">Save</button>
-            <button @click="cancelEdit(exercise)">Cancel</button>
+            <button @click="editDistanceExercise(exercise)">Save</button>
+            <button @click="cancelDistanceEdit(exercise)">Cancel</button>
           </td>
+
           <td v-else>
-            <button @click="editMode(exercise)">Edit</button>
-            <button @click="$emit('delete:exercise', exercise.id)">Delete</button>
+            <button @click="editDistanceMode(exercise)">Edit</button>
+            <button @click="$emit('delete:exercise', exercise.id)">
+              Delete
+            </button>
+          </td>
+
+        </tr>
+
+
+        <tr v-for="repExercise in repExercises" :key="repExercise.id">
+          <td v-if="editing === repExercise.id">
+             <input v-model="repExercise.type" type="text" />
+          </td>
+          <td v-else>{{ repExercise.type }}</td>
+
+          <td v-if="editing === repExercise.id">
+            <input v-model="repExercise.sets" type="number" />
+          </td>
+          <td v-else>{{ repExercise.sets }}</td>
+
+          <td v-if="editing === repExercise.id">
+            <input v-model="repExercise.reps" type="number" />
+          </td>
+          <td v-else>{{ repExercise.reps }}</td>
+
+          <td v-if="editing === repExercise.id">
+            <button @click="editExercise(repExercise)">Save</button>
+            <button @click="cancelEdit(repExercise)">Cancel</button>
+          </td>
+
+          <td v-else>
+            <button @click="editMode(repExercise)">Edit</button>
+            <button @click="$emit('delete:exercise', repExercise.id)">
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -44,8 +79,10 @@
 export default {
   name: "ExerciseList",
   props: {
-    exercises: Array,
+    distanceExercises: Array,
+    repExercises: Array,
   },
+
   data() {
     return {
       editing: null,
@@ -53,18 +90,23 @@ export default {
     };
   },
   methods: {
-    editMode(exercise) {
+    editDistanceMode(exercise) {
       this.cachedExercise = Object.assign({}, exercise);
       this.editing = exercise.id;
     },
-    editExercise(exercise) {
-      if (exercise.type === "" || exercise.time === "" || exercise.distance === "") return;
+    editDistanceExercise(exercise) {
+      if (
+        exercise.type === "" ||
+        exercise.time === "" ||
+        exercise.distance === "" 
+      )
+        return;
 
       this.$emit("edit:exercise", exercise.id, exercise);
 
       this.editing = null;
     },
-    cancelEdit(exercise) {
+    cancelDistanceEdit(exercise) {
       Object.assign(exercise, this.cachedExercise);
       this.editing = null;
     },

@@ -2,27 +2,27 @@
   <div id="distance-form">
     <form @submit.prevent="handleSubmit">
       <h2>Distance Exercise</h2>
-      <!-- <label>Exercise</label> -->
+      <label>Exercise</label>
       <input
-        v-model="exercise.type"
+        v-model="distanceExercise.type"
         type="text"
-        :class="{ 'has-error': submitting && invalidExercise }"
+        :class="{ 'has-error': submitting && invalidType }"
         @focus="clearStatus"
-        placeholder="Exercise"
+        placeholder="Type"
       />
-      <!-- <label>Exercise Time</label> -->
+      <label>Time</label>
       <input
-        v-model="exercise.time"
+        v-model="distanceExercise.time"
         type="number"
-        :class="{ 'has-error': submitting && invalidAmount }"
+        :class="{ 'has-error': submitting && invalidTime }"
         @focus="clearStatus"
         placeholder="Time"
       />
-      <!-- <label>Exercise Distance</label> -->
+      <label>Distance</label>
       <input
-        v-model="exercise.distance"
+        v-model="distanceExercise.distance"
         type="number"
-        :class="{ 'has-error': submitting && invalidAmount }"
+        :class="{ 'has-error': submitting && invalidDistance }"
         @focus="clearStatus"
         placeholder="Distance"
       />
@@ -40,7 +40,7 @@ export default {
   name: "DistanceForm",
   data() {
     return {
-      exercise: {
+      distanceExercise: {
         type: "",
         time: "",
         distance: "",
@@ -55,20 +55,21 @@ export default {
       this.submitting = true;
       this.clearStatus();
 
-      if (this.invalidExercise || this.invalidAmount) {
+      if (this.invalidType || this.invalidTime || this.invalidDistance) {
         this.error = true;
         return;
       }
 
-      this.$emit("add:exercise", this.exercise);
-      this.exercise = {
-        name: "",
-        amount: "",
+      this.$emit("add:distanceExercise", this.distanceExercise);
+      this.distanceExercise = {
+        type: "",
+        time: "",
+        distance: "",
       };
 
       this.error = false;
       this.success = true;
-      this.submitting = false;
+      this.submitting = true;
     },
     clearStatus() {
       this.success = false;
@@ -76,12 +77,15 @@ export default {
     },
   },
   computed: {
-    invalidExercise() {
-      return this.exercise.name === "";
+    invalidType() {
+      return this.distanceExercise.type === "";
     },
-    invalidAmount() {
-      return this.exercise.amount === "";
+    invalidTime() {
+      return this.distanceExercise.time === "";
     },
+    invalidDistance() {
+      return this.distanceExercise.distance === "";
+    }
   },
 };
 </script>

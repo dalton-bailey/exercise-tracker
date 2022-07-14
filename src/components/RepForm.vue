@@ -1,36 +1,36 @@
 <template>
   <div id="rep-form">
     <form @submit.prevent="handleSubmit">
-      <!-- <label>Exercise</label> -->
       <h2>Reps Exercise</h2>
+      <label>Exercise</label>
       <input
-        v-model="exercise.type"
+        v-model="repExercise.type"
         type="text"
-        :class="{ 'has-error': submitting && invalidExercise }"
+        :class="{ 'has-error': submitting && invalidType }"
         @focus="clearStatus"
-        placeholder="Exercise"
+        placeholder="Type"
       />
-      <!-- <label>Sets</label> -->
+      <label>Sets</label>
       <input
-        v-model="exercise.sets"
+        v-model="repExercise.sets"
         type="number"
-        :class="{ 'has-error': submitting && invalidAmount }"
+        :class="{ 'has-error': submitting && invalidSets }"
         @focus="clearStatus"
         placeholder="Sets"
       />
-      <!-- <label>Reps</label> -->
+      <label>Reps</label>
       <input
-        v-model="exercise.reps"
+        v-model="repExercise.reps"
         type="number"
-        :class="{ 'has-error': submitting && invalidAmount }"
+        :class="{ 'has-error': submitting && invalidReps }"
         @focus="clearStatus"
         placeholder="Reps"
       />
-      <!-- <label>Weight</label> -->
+      <label>Weight</label>
       <input
-        v-model="exercise.weight"
+        v-model="repExercise.weight"
         type="number"
-        :class="{ 'has-error': submitting && invalidAmount }"
+        :class="{ 'has-error': submitting && invalidWeight }"
         @focus="clearStatus"
         placeholder="Weight"
       />
@@ -45,14 +45,14 @@
 
 <script>
 export default {
-  name: "RepsForm",
+  name: "RepForm",
   data() {
     return {
-      exercise: {
+      repExercise: {
         type: "",
         sets: "",
         reps: "",
-        weights: "",
+        weight: "",
       },
       submitting: false,
       error: false,
@@ -64,15 +64,18 @@ export default {
       this.submitting = true;
       this.clearStatus();
 
-      if (this.invalidExercise || this.invalidAmount) {
+      if (this.invalidType || this.invalidSets || this.invalidReps || this.invalidWeight) {
         this.error = true;
         return;
       }
 
-      this.$emit("add:exercise", this.exercise);
-      this.exercise = {
-        name: "",
-        amount: "",
+
+      this.$emit("add:repExercise", this.repExercise);
+      this.repExercise = {
+        type: "",
+        sets: "",
+        reps: "",
+        weight: "",
       };
 
       this.error = false;
@@ -85,11 +88,17 @@ export default {
     },
   },
   computed: {
-    invalidExercise() {
-      return this.exercise.name === "";
+    invalidType() {
+      return this.repExercise.name === "";
     },
-    invalidAmount() {
-      return this.exercise.amount === "";
+    invalidSets() {
+      return this.repExercise.sets === "";
+    },
+    invalidReps() {
+      return this.repExercise.reps === "";
+    },
+    invalidWeight() {
+      return this.repExercise.weight === "";
     },
   },
 };
